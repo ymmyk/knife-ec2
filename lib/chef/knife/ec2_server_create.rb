@@ -592,7 +592,7 @@ class Chef
 
       def validate!
 
-        super([:image, :aws_ssh_key_id, :aws_access_key_id, :aws_secret_access_key])
+        super([:image, :aws_access_key_id, :aws_secret_access_key])
 
         if ami.nil?
           ui.error("You have not provided a valid image (AMI) value.  Please note the short option for this value recently changed from '-i' to '-I'.")
