@@ -122,6 +122,11 @@ class Chef
         :default => "22",
         :proc => Proc.new { |key| Chef::Config[:knife][:ssh_port] = key }
 
+      option :use_sudo_password,
+        :long => "--use-sudo-password",
+        :description => "Execute the bootstrap via sudo with password",
+        :boolean => false
+          
       option :ssh_gateway,
         :short => "-w GATEWAY",
         :long => "--ssh-gateway GATEWAY",
@@ -570,11 +575,13 @@ class Chef
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = [ssh_host]
         bootstrap.config[:ssh_user] = config[:ssh_user]
+        bootstrap.config[:ssh_password] = config[:ssh_password]
         bootstrap.config[:ssh_port] = config[:ssh_port]
         bootstrap.config[:ssh_gateway] = config[:ssh_gateway]
         bootstrap.config[:identity_file] = config[:identity_file]
         bootstrap.config[:chef_node_name] = locate_config_value(:chef_node_name) || server.id
         bootstrap.config[:use_sudo] = true unless config[:ssh_user] == 'root'
+        bootstrap.config[:use_sudo_password] = config[:use_sudo_password]
         # may be needed for vpc_mode
         bootstrap.config[:host_key_verify] = config[:host_key_verify]
         bootstrap_common_params(bootstrap)
